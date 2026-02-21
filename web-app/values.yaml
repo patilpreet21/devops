@@ -1,0 +1,36 @@
+replicas: 3
+image:
+  repository: patilpreet21/podipname
+  pullPolicy: IfNotPresent
+  tag: "1.0"
+
+serviceAccount:
+  create: true
+  automount: true
+  annotations: {}
+  name: ""
+
+service:
+  type: ClusterIP
+  port: 80
+
+volume:
+ size: 15Gi
+ storageClass: ebs-sc
+
+ingress:
+  enabled: true
+  className: "alb"
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-types: ip
+    alb.ingress.kubernetes.io/listener-ports: '[{"HTTP": 80,}]'
+  route:
+   - host:
+     paths:
+       - path: /
+         pathType: ImplementationSpecific
+httpRoute:
+  enabled: false
+
